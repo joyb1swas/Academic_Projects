@@ -105,4 +105,4 @@ community-reporting-system/
  
 ## Images 
 
-- In the ui/us folder you will get the interface of the system
+- In the ui/ux folder you will get the interface of the system
