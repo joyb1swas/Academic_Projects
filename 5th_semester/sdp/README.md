@@ -1,4 +1,4 @@
-# Smart Business Analytics - System Information
+# Smart Business Analytics
 
 ### 1. Project Overview
 
