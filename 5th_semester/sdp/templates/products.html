@@ -1,0 +1,89 @@
+{% extends "index.html" %}
+
+{% block page_title %}Product Management{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h3 style="margin-bottom: 16px;">Add New Product</h3>
+    <form id="productForm" class="form-grid">
+        <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" id="name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price ($)</label>
+            <input type="number" step="0.01" id="price" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Add Product</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th style="width: 100px;">Action</th>
+            </tr>
+        </thead>
+        <tbody id="productsTable">
+            <!-- populated via js -->
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("productForm");
+        const tbody = document.getElementById("productsTable");
+
+        async function loadProducts() {
+            const data = await api.get('/api/products');
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No products found. Add one above!</td></tr>';
+                return;
+            }
+            data.forEach(p => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>#${p.id}</td>
+                    <td style="font-weight: 500;">${p.name}</td>
+                    <td>$${p.price.toFixed(2)}</td>
+                    <td>
+                        <button onclick="deleteProduct(${p.id})" style="background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.deleteProduct = async (id) => {
+            if (confirm("Are you sure? Deleting this product will automatically delete all its recorded sales too!")) {
+                const res = await api.delete(`/api/products/${id}`);
+                if (res) loadProducts();
+            }
+        };
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            const price = document.getElementById("price").value;
+
+            const res = await api.post('/api/products', { name, price });
+            if (res) {
+                form.reset();
+                loadProducts();
+            }
+        });
+
+        loadProducts();
+    });
+</script>
+{% endblock %}

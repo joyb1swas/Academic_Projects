@@ -1,0 +1,67 @@
+{% extends "index.html" %}
+
+{% block page_title %}Dashboard Breakdown{% endblock %}
+
+{% block content %}
+<div class="summary-grid">
+    <div class="summary-card revenue">
+        <h3>Total Revenue</h3>
+        <div class="value" id="totalRevenue">$0.00</div>
+        <div class="trend" id="revenueTrend" style="margin-top: 8px; font-size: 0.85rem; font-weight: 600;"></div>
+    </div>
+    <div class="summary-card expenses">
+        <h3>Total Expenses</h3>
+        <div class="value" id="totalExpenses">$0.00</div>
+        <div class="trend" id="expenseTrend" style="margin-top: 8px; font-size: 0.85rem; font-weight: 600; color: var(--danger);"></div>
+    </div>
+    <div class="summary-card profit">
+        <h3>Net Profit</h3>
+        <div class="value" id="netProfit">$0.00</div>
+    </div>
+</div>
+
+<div class="dashboard-row">
+    <div class="chart-card">
+        <h3>Sales Over Time</h3>
+        <canvas id="salesChart"></canvas>
+    </div>
+    <div class="chart-card">
+        <h3>Expense Distribution</h3>
+        <canvas id="expenseChart"></canvas>
+    </div>
+</div>
+
+<div class="dashboard-row" style="grid-template-columns: 1fr 1fr; margin-bottom: 32px;">
+    <div class="card" style="padding: 24px; margin-bottom: 0;">
+        <h3 style="margin-bottom: 16px;">🔥 Top 3 Performers</h3>
+        <table>
+            <thead><tr><th>Product</th><th>Revenue</th></tr></thead>
+            <tbody id="topPerformers"></tbody>
+        </table>
+    </div>
+    <div class="card" style="padding: 24px; margin-bottom: 0;">
+        <h3 style="margin-bottom: 16px;">⚠️ Slow Movers</h3>
+        <table>
+            <thead><tr><th>Product</th><th>Revenue</th></tr></thead>
+            <tbody id="bottomPerformers"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="suggestions-card">
+    <h3>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+        Smart Suggestions
+    </h3>
+    <p style="margin-bottom: 20px; color: var(--gray); font-size: 0.95rem;">Based on performance, here are suggestions to improve lower selling products.</p>
+    <div id="suggestionsList">
+        <!-- populated via js -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
