@@ -1,4 +1,4 @@
-# System Information — Community Problem Reporting System
+# Community Problem Reporting System
 
 ## 1. Overview
 
